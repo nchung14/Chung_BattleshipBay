@@ -6,56 +6,58 @@ struct Point
   int y;
 };
 
-int xcursor;
+int xcursor; //x and y coordinates of the cursor
 int ycursor;
-
-/*Point s1 = {
-
-int boat[4] = {s1,s2,s3,s4};*/
 
 void setup()
 {
   MeggyJrSimpleSetup();
-  xcursor=4;
-  ycursor=4;
-  
-  
+  xcursor=4; //initial cursor position
+  ycursor=4; 
+  SetAuxLEDsBinary(B11111111);
 }
 
-void loop()
+void loop() 
 {
-  DrawBay();
-  DrawCursor();
-  DisplaySlate();
+  DrawBay(); //method for drawing the island border
+  DrawCursor(); //method for drawing the cursor
+  DisplaySlate(); 
 }
-
 
 void DrawCursor()
 {
   DrawPx(xcursor,ycursor,7);
   DisplaySlate();
-  delay(200);
+  delay(400);
   ClearSlate();
   DrawBay();
   DisplaySlate();
-  delay(200);
+  delay(400);
     
   CheckButtonsDown();
   {
     if (Button_Right)
       xcursor=xcursor+1;
+      if (xcursor==7)
+        xcursor=6;
     if (Button_Up)
       ycursor=ycursor+1;
+      if (ycursor==7)
+        ycursor=6;
     if (Button_Left)
       xcursor=xcursor-1;
+      if (xcursor==0)
+        xcursor=1;
     if (Button_Down)
       ycursor=ycursor-1;
+      if (ycursor==0)
+        ycursor=1;
   }
 }
 
 void DrawBay()
 {
-  for (int bay = 0; bay<9; bay++)
+  for (int bay = 0; bay<8; bay++)
   {
     DrawPx(0,bay,4);
     DrawPx(bay,0,4);
@@ -63,3 +65,38 @@ void DrawBay()
     DisplaySlate();
   }
 }
+
+void DrawAmmo()
+{
+  Point a1 = {0,7};
+  Point a2 = {1,7};
+  Point a3 = {2,7};
+  Point a4 = {3,7};
+  Point a5 = {4,7};
+  Point a6 = {5,7};
+  Point a7 = {6,7};
+  Point a8 = {7,7};
+  
+  Point PxAmmo[8] = {a1,a2,a3,a4,a5,a6,a7,a8};
+  int ShotCounter = 16;
+  CheckButtonsPress();
+  {
+    if (Button_A)
+      ShotCounter = ShotCounter - 1;
+  if (ShotCounter = 16)
+    SetAuxLEDsBinary(B11111111);
+    for (int i = 0; i < 8; i++)
+    {
+      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    }
+  }      
+}
+/*void DrawBoat()
+{
+  int boat[3] = {s1,s2,s3};
+  randomboatx=random(6)+1;
+  randomboaty=random(6)+1;
+  Point s1 = {randomboatx,randomboaty,1}
+  Point s2 = {randomboatx+1,randomboaty,1}
+  DrawPx(randomboatx,randomboaty,1);
+}*/
