@@ -19,8 +19,9 @@ void setup()
 
 void loop() 
 {
-  DrawBay(); //method for drawing the island border
-  DrawCursor(); //method for drawing the cursor
+  DrawBay(); //method for drawing the island border, first as everything over it
+  DrawAmmo(); //method for drawing Ammo, second just in case to overide backdrop
+  DrawCursor(); //method for drawing the cursor, last to overide background
   DisplaySlate(); 
 }
 
@@ -28,11 +29,12 @@ void DrawCursor()
 {
   DrawPx(xcursor,ycursor,7);
   DisplaySlate();
-  delay(400);
+  delay(200);
   ClearSlate();
-  DrawBay();
+  DrawBay(); //within drawing cursor to prevent blinking 
+  DrawAmmo();
   DisplaySlate();
-  delay(400);
+  delay(200);
     
   CheckButtonsDown();
   {
@@ -83,12 +85,62 @@ void DrawAmmo()
   {
     if (Button_A)
       ShotCounter = ShotCounter - 1;
-  if (ShotCounter = 16)
+      
+  if (ShotCounter == 16)
     SetAuxLEDsBinary(B11111111);
     for (int i = 0; i < 8; i++)
     {
       DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
     }
+  if (ShotCounter == 15)
+    SetAuxLEDsBinary(B11111110);
+    for (int i = 0; i < 8; i++)
+    {
+      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    }
+  if (ShotCounter == 14)
+    SetAuxLEDsBinary(B11111100);
+    for (int i = 0; i < 8; i++)
+    {
+      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    }
+  if (ShotCounter == 13)
+    SetAuxLEDsBinary(B11111000);
+    for (int i = 0; i < 8; i++)
+    {
+      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    }
+  if (ShotCounter == 12)
+    SetAuxLEDsBinary(B11110000);
+    for (int i = 0; i < 8; i++)
+    {
+      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    }
+  if (ShotCounter == 11)
+    SetAuxLEDsBinary(B11100000);
+    for (int i = 0; i < 8; i++)
+    {
+      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    }
+  if (ShotCounter == 10)
+    SetAuxLEDsBinary(B11000000);
+    for (int i = 0; i < 8; i++)
+    {
+      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    }
+  if (ShotCounter == 9)
+    SetAuxLEDsBinary(B10000000);
+    for (int i = 0; i < 8; i++)
+    {
+      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    }
+  if (ShotCounter == 8)
+    SetAuxLEDsBinary(B00000000);
+    for (int i = 0; i < 8; i++)
+    {
+      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    }
+    
   }      
 }
 /*void DrawBoat()
