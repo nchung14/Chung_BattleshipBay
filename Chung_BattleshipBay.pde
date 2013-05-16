@@ -8,12 +8,15 @@ struct Point
 
 int xcursor; //x and y coordinates of the cursor
 int ycursor;
+int CursorCounter = 0;
+int ShotCounter;
 
 void setup()
 {
   MeggyJrSimpleSetup();
   xcursor=4; //initial cursor position
   ycursor=4; 
+  ShotCounter = 16;
   SetAuxLEDsBinary(B11111111);
 }
 
@@ -22,19 +25,29 @@ void loop()
   DrawBay(); //method for drawing the island border, first as everything over it
   DrawAmmo(); //method for drawing Ammo, second just in case to overide backdrop
   DrawCursor(); //method for drawing the cursor, last to overide background
-  DisplaySlate(); 
+  DisplaySlate();
+  delay(200);
+  ClearSlate();
 }
 
 void DrawCursor()
 {
-  DrawPx(xcursor,ycursor,7);
+  CursorCounter++;
+  if (CursorCounter > 10)
+    CursorCounter = 0;
+  if (CursorCounter%2 == 0)
+  {
+    DrawPx(xcursor,ycursor,7);
+  }
+ 
+  /*DrawPx(xcursor,ycursor,7);
   DisplaySlate();
   delay(200);
   ClearSlate();
   DrawBay(); //within drawing cursor to prevent blinking 
   DrawAmmo();
   DisplaySlate();
-  delay(200);
+  delay(200);*/
     
   CheckButtonsDown();
   {
@@ -80,67 +93,48 @@ void DrawAmmo()
   Point a8 = {7,7};
   
   Point PxAmmo[8] = {a1,a2,a3,a4,a5,a6,a7,a8};
-  int ShotCounter = 16;
-  CheckButtonsPress();
+  CheckButtonsPress(); //MUST BE FIXED, shots don't fire
   {
     if (Button_A)
       ShotCounter = ShotCounter - 1;
+  
+  for (int i = 0; i < 8; i++)
+  {
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
       
   if (ShotCounter == 16)
     SetAuxLEDsBinary(B11111111);
-    for (int i = 0; i < 8; i++)
-    {
-      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    }
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 15)
     SetAuxLEDsBinary(B11111110);
-    for (int i = 0; i < 8; i++)
-    {
-      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    }
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 14)
     SetAuxLEDsBinary(B11111100);
-    for (int i = 0; i < 8; i++)
-    {
-      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    }
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 13)
     SetAuxLEDsBinary(B11111000);
-    for (int i = 0; i < 8; i++)
-    {
-      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    }
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 12)
     SetAuxLEDsBinary(B11110000);
-    for (int i = 0; i < 8; i++)
-    {
-      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    }
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 11)
     SetAuxLEDsBinary(B11100000);
-    for (int i = 0; i < 8; i++)
-    {
-      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    }
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 10)
     SetAuxLEDsBinary(B11000000);
-    for (int i = 0; i < 8; i++)
-    {
-      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    }
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 9)
     SetAuxLEDsBinary(B10000000);
-    for (int i = 0; i < 8; i++)
-    {
-      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    }
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 8)
     SetAuxLEDsBinary(B00000000);
-    for (int i = 0; i < 8; i++)
-    {
-      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    }
-    
+    DrawPx(PxAmmo[i].x,PxAmmo[i].y,3);
+
+  if (ShotCounter == 7)
+    DrawPx(PxAmmo[i-1].x,PxAmmo[i-1].y,3);
+  if (ShotCounter == 6)
+    DrawPx(PxAmmo[i-2].x,PxAmmo[i-2].y,3);
+  }    
   }      
 }
 /*void DrawBoat()
