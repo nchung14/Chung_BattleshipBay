@@ -26,7 +26,7 @@ int xcursor; //x and y coordinates of the cursor
 int ycursor;
 int CursorCounter = 0;
 int ShotCounter;
-
+boolean isBlue = false;
 int MoveBoatx = random(5);
 int MoveBoaty = random(5);
 
@@ -84,19 +84,6 @@ void loop()
 void DrawCursor()
 {
   CursorCounter++;
-  if (CursorCounter > 10)
-  {
-    CursorCounter = 0;
-  }
-  if (CursorCounter%2 == 0)
-  {
-    DrawPx(xcursor,ycursor,7);
-  }
-
-  if (CursorCounter%2 == 1)
-    {
-    DrawPx(xcursor,ycursor,0);
-    }
 
   /*DrawPx(xcursor,ycursor,7);
   DisplaySlate();
@@ -110,22 +97,69 @@ void DrawCursor()
   CheckButtonsDown();
   {
     if (Button_Right)
+    {
+      if (isBlue)
+      {
+        isBlue = false;
+        DrawPx(xcursor,ycursor,Blue);
+      }
+      else DrawPx(xcursor,ycursor,0);
       xcursor=xcursor+1;
       if (xcursor==7)
         xcursor=6;
+    }
     if (Button_Up)
+    {
+      if (isBlue)
+      {
+        isBlue = false;
+        DrawPx(xcursor,ycursor,Blue);
+      }
+      else DrawPx(xcursor,ycursor,0);
       ycursor=ycursor+1;
       if (ycursor==7)
         ycursor=6;
+    }
     if (Button_Left)
+    {
+      if (isBlue)
+      {
+        isBlue = false;
+        DrawPx(xcursor,ycursor,Blue);
+      }
+      else DrawPx(xcursor,ycursor,0);
       xcursor=xcursor-1;
       if (xcursor==0)
         xcursor=1;
+    }
     if (Button_Down)
+    {
+      if (isBlue)
+      {
+        isBlue = false;
+        DrawPx(xcursor,ycursor,Blue);
+      }
+      else DrawPx(xcursor,ycursor,0);
       ycursor=ycursor-1;
       if (ycursor==0)
         ycursor=1;
+    }
   }
+  if (CursorCounter > 10)
+  {
+    CursorCounter = 0;
+  }
+  if (CursorCounter%2 == 0)
+  {
+    if (ReadPx(xcursor,ycursor) == Blue) isBlue = true;
+    DrawPx(xcursor,ycursor,7);
+  }
+
+  if (CursorCounter%2 == 1)
+    {
+    if (ReadPx(xcursor,ycursor) == Blue) isBlue = true;
+    DrawPx(xcursor,ycursor,0);
+    }
 }
 
 void DrawBay()
@@ -148,7 +182,7 @@ void DrawAmmo()
       ShotCounter = ShotCounter - 1;
       Serial.println(ShotCounter);
       Serial.println("i wanna draw the blue now");
-      DrawPx(xcursor,ycursor,1); //doesn't draw this point. if it does, it's the same color as the cursor. PROBLEM
+      DrawPx(xcursor,ycursor,Blue); //doesn't draw this point. if it does, it's the same color as the cursor. PROBLEM
     }
   
   
