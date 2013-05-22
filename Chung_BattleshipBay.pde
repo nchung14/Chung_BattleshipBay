@@ -27,6 +27,7 @@ int ycursor;
 int CursorCounter = 0;
 int ShotCounter;
 boolean isBlue = false;
+boolean OutofShots;
 int MoveBoatx = random(5);
 int MoveBoaty = random(5);
 
@@ -66,6 +67,7 @@ void setup()
   xcursor=4; //initial cursor position
   ycursor=4; 
   ShotCounter = 16;
+  OutofShots = false;
   SetAuxLEDsBinary(B11111111);
 }
 
@@ -73,8 +75,8 @@ void loop()
 {
   DrawBay(); //method for drawing the island border, first as everything over it
   DrawAmmo(); //method for drawing Ammo, second just in case to overide backdrop
-  DrawCursor(); //method for drawing the cursor, last to overide background
   DrawBoat();
+  DrawCursor(); //method for drawing the cursor, last to overide background
   DisplaySlate();
   delay(200);
  // ClearSlate();
@@ -179,10 +181,13 @@ void DrawAmmo()
   {
     if (Button_A)
     {
-      ShotCounter = ShotCounter - 1;
-      Serial.println(ShotCounter);
-      Serial.println("i wanna draw the blue now");
-      DrawPx(xcursor,ycursor,Blue); //doesn't draw this point. if it does, it's the same color as the cursor. PROBLEM
+      if (OutofShots == false && ShotCounter > 0);
+      {
+        Serial.println(ShotCounter);
+        Serial.println("i wanna draw the blue now");
+        ShotCounter = ShotCounter - 1;
+        DrawPx(xcursor,ycursor,Blue); //doesn't draw this point. if it does, it's the same color as the cursor. PROBLEM
+      }
     }
   
   
@@ -190,49 +195,110 @@ void DrawAmmo()
   
   for (int i = 0; i < 8; i++)
   {
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
       
   if (ShotCounter == 16)
     SetAuxLEDsBinary(B11111111);
     DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 15)
     SetAuxLEDsBinary(B11111110);
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 14)
     SetAuxLEDsBinary(B11111100);
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 13)
     SetAuxLEDsBinary(B11111000);
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 12)
     SetAuxLEDsBinary(B11110000);
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 11)
     SetAuxLEDsBinary(B11100000);
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 10)
     SetAuxLEDsBinary(B11000000);
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 9)
     SetAuxLEDsBinary(B10000000);
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   if (ShotCounter == 8)
     SetAuxLEDsBinary(B00000000);
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,3);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
   }
   
   if (ShotCounter == 7)
-    for (int j = 0; j < 7; j++)
+    for (int i = 0; i < 7; i++)
   {
-    DrawPx(PxAmmo[j].x,PxAmmo[j].y,3);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark); 
   }
-
   if (ShotCounter == 6)
     for (int i = 0; i < 6; i++)
   {
-    DrawPx(PxAmmo[i].x,PxAmmo[i].y,3);
+//    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+    DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark);
+    DrawPx(PxAmmo[6].x,PxAmmo[6].y,Dark);
   }    
-  
+  if (ShotCounter == 5)
+    for (int i = 0; i < 5; i++)
+    {
+//      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+      DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark);
+      DrawPx(PxAmmo[6].x,PxAmmo[6].y,Dark);
+      DrawPx(PxAmmo[5].x,PxAmmo[5].y,Dark);
+    }
+  if (ShotCounter == 4)
+    for (int i = 0; i < 4; i++)
+    {
+//      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+      DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark);
+      DrawPx(PxAmmo[6].x,PxAmmo[6].y,Dark);
+      DrawPx(PxAmmo[5].x,PxAmmo[5].y,Dark);
+      DrawPx(PxAmmo[4].x,PxAmmo[4].y,Dark);
+    }
+  if (ShotCounter == 3)
+    for (int i = 0; i < 3; i++)
+    {
+//      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+      DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark);
+      DrawPx(PxAmmo[6].x,PxAmmo[6].y,Dark);
+      DrawPx(PxAmmo[5].x,PxAmmo[5].y,Dark);
+      DrawPx(PxAmmo[4].x,PxAmmo[4].y,Dark);
+      DrawPx(PxAmmo[3].x,PxAmmo[3].y,Dark);      
+    }
+  if (ShotCounter == 2)
+    for (int i = 0; i < 2; i++)
+    {
+//      DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
+      DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark);
+      DrawPx(PxAmmo[6].x,PxAmmo[6].y,Dark);
+      DrawPx(PxAmmo[5].x,PxAmmo[5].y,Dark);
+      DrawPx(PxAmmo[4].x,PxAmmo[4].y,Dark);
+      DrawPx(PxAmmo[3].x,PxAmmo[3].y,Dark);  
+      DrawPx(PxAmmo[2].x,PxAmmo[2].y,Dark);        
+    }
+  if (ShotCounter == 1)
+  {
+    DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark);
+    DrawPx(PxAmmo[6].x,PxAmmo[6].y,Dark);
+    DrawPx(PxAmmo[5].x,PxAmmo[5].y,Dark);
+    DrawPx(PxAmmo[4].x,PxAmmo[4].y,Dark);
+    DrawPx(PxAmmo[3].x,PxAmmo[3].y,Dark);  
+    DrawPx(PxAmmo[2].x,PxAmmo[2].y,Dark);   
+    DrawPx(PxAmmo[1].x,PxAmmo[1].y,Dark);       
+  }
+  if (ShotCounter <= 0)
+  {
+    OutofShots = true;
+    DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark);
+    DrawPx(PxAmmo[6].x,PxAmmo[6].y,Dark);
+    DrawPx(PxAmmo[5].x,PxAmmo[5].y,Dark);
+    DrawPx(PxAmmo[4].x,PxAmmo[4].y,Dark);
+    DrawPx(PxAmmo[3].x,PxAmmo[3].y,Dark);  
+    DrawPx(PxAmmo[2].x,PxAmmo[2].y,Dark);   
+    DrawPx(PxAmmo[1].x,PxAmmo[1].y,Dark);   
+    DrawPx(PxAmmo[0].x,PxAmmo[0].y,Dark);   
+  }
   }      
 }
 
