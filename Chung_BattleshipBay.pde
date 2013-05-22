@@ -77,18 +77,26 @@ void loop()
   DrawBoat();
   DisplaySlate();
   delay(200);
-  ClearSlate();
+ // ClearSlate();
+  //DrawAmmo();
 }
 
 void DrawCursor()
 {
   CursorCounter++;
   if (CursorCounter > 10)
+  {
     CursorCounter = 0;
+  }
   if (CursorCounter%2 == 0)
   {
     DrawPx(xcursor,ycursor,7);
   }
+
+  if (CursorCounter%2 == 1)
+    {
+    DrawPx(xcursor,ycursor,0);
+    }
 
   /*DrawPx(xcursor,ycursor,7);
   DisplaySlate();
@@ -127,17 +135,24 @@ void DrawBay()
     DrawPx(0,bay,4);
     DrawPx(bay,0,4);
     DrawPx(7,bay,4);
-    DisplaySlate();
+    //DisplaySlate();  
   }
 }
 
 void DrawAmmo()
 {
-  CheckButtonsPress(); //MUST BE FIXED, shots don't fire
+  CheckButtonsDown(); //MUST BE FIXED, shots don't fire
   {
     if (Button_A)
+    {
       ShotCounter = ShotCounter - 1;
       Serial.println(ShotCounter);
+      Serial.println("i wanna draw the blue now");
+      DrawPx(xcursor,ycursor,1); //doesn't draw this point. if it does, it's the same color as the cursor. PROBLEM
+    }
+  
+  
+  
   
   for (int i = 0; i < 8; i++)
   {
