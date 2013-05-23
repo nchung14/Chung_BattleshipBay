@@ -27,6 +27,7 @@ int ycursor;
 int CursorCounter = 0;
 int ShotCounter;
 boolean isBlue = false;
+boolean isRed = false;
 boolean OutofShots;
 int MoveBoatx = random(5);
 int MoveBoaty = random(5);
@@ -59,6 +60,12 @@ Point c2 = {c1.x+1,c1.y};
 Point c3 = {c1.x+2,c1.y};
 
 Point BoatHorz[3] = {c1,c2,c3};
+
+Point d1 = {5,6};
+Point d2 = {5,5};
+Point d3 = {5,4};
+
+Point Boat3[3] = {d1,d2,d3};
 
 void setup()
 {
@@ -106,9 +113,19 @@ void DrawCursor()
         DrawPx(xcursor,ycursor,Blue);
       }
       else DrawPx(xcursor,ycursor,0);
-      xcursor=xcursor+1;
+      xcursor=xcursor+1;  
       if (xcursor==7)
+      {
         xcursor=6;
+      }
+      
+//      if (isRed)
+//      {
+//        isRed = false;
+//        DrawPx(xcursor,ycursor,Red);
+//      }
+//      else DrawPx(xcursor,ycursor,0);
+//      xcursor=xcursor+1;
     }
     if (Button_Up)
     {
@@ -121,6 +138,14 @@ void DrawCursor()
       ycursor=ycursor+1;
       if (ycursor==7)
         ycursor=6;
+      
+//      if (isRed)
+//      {
+//        isRed = false;
+//        DrawPx(xcursor,ycursor,Red);
+//      }
+//      else DrawPx(xcursor,ycursor,0);
+//      ycursor=ycursor+1;
     }
     if (Button_Left)
     {
@@ -133,6 +158,14 @@ void DrawCursor()
       xcursor=xcursor-1;
       if (xcursor==0)
         xcursor=1;
+
+//      if (isRed)
+//      {
+//        isRed = false;
+//        DrawPx(xcursor,ycursor,Red);
+//      }
+//      else DrawPx(xcursor,ycursor,0);
+//      xcursor=xcursor-1;
     }
     if (Button_Down)
     {
@@ -145,6 +178,14 @@ void DrawCursor()
       ycursor=ycursor-1;
       if (ycursor==0)
         ycursor=1;
+    
+//      if (isRed)
+//      {
+//        isRed = false;
+//        DrawPx(xcursor,ycursor,Red);
+//      }
+//      else DrawPx(xcursor,ycursor,0);
+//      ycursor=ycursor-1;
     }
   }
   if (CursorCounter > 10)
@@ -154,14 +195,26 @@ void DrawCursor()
   if (CursorCounter%2 == 0)
   {
     if (ReadPx(xcursor,ycursor) == Blue) isBlue = true;
-    DrawPx(xcursor,ycursor,7);
+    {
+      DrawPx(xcursor,ycursor,7);
+    }
+//    if (ReadPx(xcursor,ycursor) == Red) isRed = true;
+//    {
+//      DrawPx(xcursor,ycursor,1);
+//    }
   }
 
   if (CursorCounter%2 == 1)
-    {
+  {
     if (ReadPx(xcursor,ycursor) == Blue) isBlue = true;
-    DrawPx(xcursor,ycursor,0);
+    {
+      DrawPx(xcursor,ycursor,0);
     }
+//    if (ReadPx(xcursor,ycursor) == Red) isRed = true;
+//    {
+//      DrawPx(xcursor,ycursor,1);
+//    }
+  }
 }
 
 void DrawBay()
@@ -181,12 +234,20 @@ void DrawAmmo()
   {
     if (Button_A)
     {
-      if (OutofShots == false && ShotCounter > 0);
+      if (OutofShots == false);
       {
         Serial.println(ShotCounter);
         Serial.println("i wanna draw the blue now");
+        Serial.println(OutofShots);
         ShotCounter = ShotCounter - 1;
-        DrawPx(xcursor,ycursor,Blue); //doesn't draw this point. if it does, it's the same color as the cursor. PROBLEM
+        DrawPx(xcursor,ycursor,Blue);
+      }
+      for (int Length = 0;Length < 3;Length++)
+      {
+        if (xcursor== BoatVert[Length].x && ycursor == BoatVert[Length].y)
+         {
+           DrawPx(xcursor,ycursor,1);
+         }
       }
     }
   
@@ -306,7 +367,7 @@ void DrawBoat()
 {
   for (int Length = 0;Length < 4;Length++)
   {
-    DrawPx(BoatVert[Length].x+MoveBoatx,BoatVert[Length].y+MoveBoaty,1);
+    DrawPx(BoatVert[Length].x+MoveBoatx,BoatVert[Length].y+MoveBoaty,Dark);
     if (MoveBoaty > 2)
       MoveBoaty = random(1)+1;
 //      Serial.println("MoveBoaty");
@@ -314,9 +375,11 @@ void DrawBoat()
   }
   for (int Length = 0;Length < 3;Length++)
   {
-    DrawPx(BoatHorz[Length].x+MoveBoatx,BoatHorz[Length].y+MoveBoaty,1);
+    DrawPx(BoatHorz[Length].x+MoveBoatx+1,BoatHorz[Length].y+MoveBoaty-1,Dark);
     if (MoveBoatx > 3)
       MoveBoatx = random(3)+1;
+      
+    DrawPx(Boat3[Length].x,Boat3[Length].y,Dark);
 //      Serial.println("MoveBoatx");
 //      Serial.println(MoveBoatx);
  
