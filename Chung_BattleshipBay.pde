@@ -1,3 +1,28 @@
+/* 
+Create two boolean variables: WonGame / LostGame; both start false
+In voidloop call three 'if' statements: 
+  The first: if (wonGame == false) 
+  the second: if (wonGame == true)
+  the third: if (lostGame == true)
+
+if wonGame == false, have the game play out.
+if wonGame == true, call upon the method that will regenerate the game and then write in a winning tone sound. (if time for levels, this will then increase the level)
+if lostGame == true, call upon the method that will regenerate the game and then write in a losing tone sound. this will fix the out of shots problem and still drawing blue
+_____
+In order for for wonGame to == true, all the boats must be found before OutofShots == true. 
+In order for lostGame to == true, OutofShots == true.
+______
+
+create another boolean called isRed = false;
+The red represents a ship that has been found in the ocean.
+When clicked with the cursor, it will show up as red, not blue.
+If isRed == true, isBlue = false. It shouldn't draw blue over the red dot. 
+if there is a boat, it will not draw over it.
+  want it to draw red.
+                                  
+
+*/
+
 #include <MeggyJrSimple.h> 
 
 //Boat b1 = {randomboatx,randomboaty,1};
@@ -11,7 +36,7 @@ struct Point
   int y;
 };
 
-Point a1 = {0,7};
+Point a1 = {0,7}; //Points in array for displaying ammo on the Px Board
 Point a2 = {1,7};
 Point a3 = {2,7};
 Point a4 = {3,7};
@@ -20,17 +45,17 @@ Point a6 = {5,7};
 Point a7 = {6,7};
 Point a8 = {7,7};
   
-Point PxAmmo[8] = {a1,a2,a3,a4,a5,a6,a7,a8};
+Point PxAmmo[8] = {a1,a2,a3,a4,a5,a6,a7,a8}; //Ammo on board array
 
 int xcursor; //x and y coordinates of the cursor
 int ycursor;
-int CursorCounter = 0;
-int ShotCounter;
-boolean isBlue = false;
-boolean isRed = false;
-boolean OutofShots;
-int MoveBoatx = random(5);
-int MoveBoaty = random(5);
+int CursorCounter = 0; //counts interations for the modulous to blink cursor
+int ShotCounter; //counter to keep track of ammo remaining
+boolean isBlue = false; //boolean variable to display drawn missed shots
+boolean isRed = false; //boolean variable to display drawn hits
+boolean OutofShots; // boolean variable to disable shooting once ammo is at zero
+int MoveBoatx = random(5); //random xcoordinate for boat
+int MoveBoaty = random(5); //random ycoordinate for boat
 
 //struct Boat
 //{
@@ -48,24 +73,27 @@ int MoveBoaty = random(5);
 //
 //Point Boat[4] = {b1,b2,b3,b4};
 
-Point b1 = {1,1};
+Point b1 = {1,1}; //Points in array for another boat
 Point b2 = {b1.x,b1.y+1};
 Point b3 = {b1.x,b1.y+2};
 Point b4 = {b1.x,b1.y+3};
 
 Point BoatVert[4] = {b1,b2,b3,b4};
 
-Point c1 = {1,1};
+Point c1 = {1,1}; //Points in array for boat
 Point c2 = {c1.x+1,c1.y};
 Point c3 = {c1.x+2,c1.y};
 
 Point BoatHorz[3] = {c1,c2,c3};
 
-Point d1 = {5,6};
+Point d1 = {5,6}; //Points in array for boat
 Point d2 = {5,5};
 Point d3 = {5,4};
 
 Point Boat3[3] = {d1,d2,d3};
+
+boolean wonGame = false; //the game starts off as not being won. called when conditions are met to win the game
+boolean lostGame = false; //if the player runs out of ammo, then this will be changed to true and the board will reset with a losing sound
 
 void setup()
 {
@@ -73,26 +101,53 @@ void setup()
   Serial.begin(9600);
   xcursor=4; //initial cursor position
   ycursor=4; 
-  ShotCounter = 16;
-  OutofShots = false;
-  SetAuxLEDsBinary(B11111111);
+  ShotCounter = 16; //start game with max ammo
+  OutofShots = false; //enable shooting 
+  SetAuxLEDsBinary(B11111111); //display all LEDs for max ammo
 }
 
 void loop() 
 {
-  DrawBay(); //method for drawing the island border, first as everything over it
-  DrawAmmo(); //method for drawing Ammo, second just in case to overide backdrop
-  DrawBoat();
-  DrawCursor(); //method for drawing the cursor, last to overide background
+  if (wonGame == false) // playing the game! :) //(MIGHT need to say wonGame == false && lostGame == false)
+    {
+      DrawBay(); //method for drawing the island border, first as everything over it
+      DrawAmmo(); //method for drawing Ammo, second just in case to overide backdrop
+      
+      DrawBoat(); //REPLACE WITH drawBoats()
+      
+      DrawCursor(); //method for drawing the cursor, last to overide background
+    }
+  
+  if (wonGame == true) //the player has won the game (found all of the boats without running out of ammo)
+    {
+      //call method for drawing a new board
+      //winning sound!
+        //if time for levels, increase level by one here.
+      wonGame = false; //sets the game back to 'playing' mode, so to speak
+    }
+  
+  if (lostGame == true) //if the player has run out of ammo without finding all the boats
+    {
+      //call method for drawing out a new board
+      //losing sound
+      lostGame = false;
+      wonGame = false; //sets the game back to 'playing' mode, so to speak
+    }
+     
   DisplaySlate();
   delay(200);
- // ClearSlate();
+  // ClearSlate();
   //DrawAmmo();
 }
 
+//void drawBoats()
+//{
+//  //code will draw boats randomly and check to see if they are overlapping. if they are, redraw them
+//}
+
 void DrawCursor()
 {
-  CursorCounter++;
+  CursorCounter++; //adds one to cursorcounter every iteration to blink
 
   /*DrawPx(xcursor,ycursor,7);
   DisplaySlate();
@@ -105,15 +160,15 @@ void DrawCursor()
     
   CheckButtonsDown();
   {
-    if (Button_Right)
+    if (Button_Right) //move cursor right
     {
-      if (isBlue)
+      if (isBlue) //checks if dot underneath cursor is blue
       {
-        isBlue = false;
+        isBlue = false; //if it is don't draw another one
         DrawPx(xcursor,ycursor,Blue);
       }
-      else DrawPx(xcursor,ycursor,0);
-      xcursor=xcursor+1;  
+      else DrawPx(xcursor,ycursor,0); //if not draw the cursor Dark to blink it
+      xcursor=xcursor+1; 
       if (xcursor==7)
       {
         xcursor=6;
@@ -127,9 +182,9 @@ void DrawCursor()
 //      else DrawPx(xcursor,ycursor,0);
 //      xcursor=xcursor+1;
     }
-    if (Button_Up)
+    if (Button_Up) //moves cursor up
     {
-      if (isBlue)
+      if (isBlue) //checks if dot underneath cursor is blue; same thing
       {
         isBlue = false;
         DrawPx(xcursor,ycursor,Blue);
@@ -147,7 +202,7 @@ void DrawCursor()
 //      else DrawPx(xcursor,ycursor,0);
 //      ycursor=ycursor+1;
     }
-    if (Button_Left)
+    if (Button_Left) //same thing for button left
     {
       if (isBlue)
       {
@@ -167,7 +222,7 @@ void DrawCursor()
 //      else DrawPx(xcursor,ycursor,0);
 //      xcursor=xcursor-1;
     }
-    if (Button_Down)
+    if (Button_Down) //same thing for button down
     {
       if (isBlue)
       {
@@ -188,13 +243,13 @@ void DrawCursor()
 //      ycursor=ycursor-1;
     }
   }
-  if (CursorCounter > 10)
+  if (CursorCounter > 10) //resets cursor counter so it doesn't just increase forever
   {
     CursorCounter = 0;
   }
-  if (CursorCounter%2 == 0)
+  if (CursorCounter%2 == 0) //modulous to make cursor blink every two iteration 
   {
-    if (ReadPx(xcursor,ycursor) == Blue) isBlue = true;
+    if (ReadPx(xcursor,ycursor) == Blue) isBlue = true; //code to maintain blue 
     {
       DrawPx(xcursor,ycursor,7);
     }
@@ -204,7 +259,7 @@ void DrawCursor()
 //    }
   }
 
-  if (CursorCounter%2 == 1)
+  if (CursorCounter%2 == 1) //other half of blinking cursor code
   {
     if (ReadPx(xcursor,ycursor) == Blue) isBlue = true;
     {
@@ -217,7 +272,7 @@ void DrawCursor()
   }
 }
 
-void DrawBay()
+void DrawBay() //code to draw the bay borders of game
 {
   for (int bay = 0; bay<8; bay++)
   {
@@ -230,31 +285,35 @@ void DrawBay()
 
 void DrawAmmo()
 {
-  CheckButtonsDown(); //MUST BE FIXED, shots don't fire
+  CheckButtonsDown(); //Code to shoot ammo
   {
     if (Button_A)
     {
       if (OutofShots == false);
-      {
-        Serial.println(ShotCounter);
-        Serial.println("i wanna draw the blue now");
-        Serial.println(OutofShots);
-        ShotCounter = ShotCounter - 1;
-        DrawPx(xcursor,ycursor,Blue);
-      }
-      for (int Length = 0;Length < 3;Length++)
-      {
-        if (xcursor== BoatVert[Length].x && ycursor == BoatVert[Length].y)
+        {
+          Serial.println(ShotCounter);
+          Serial.println("i wanna draw the blue now");
+          Serial.println(OutofShots);
+          ShotCounter = ShotCounter - 1; //decrease shot counter with every shot
+          DrawPx(xcursor,ycursor,Blue); //Draw a blue dot to mark misses
+        }
+       for (int Length = 0;Length < 3;Length++)
          {
-           DrawPx(xcursor,ycursor,1);
+           if (xcursor== BoatVert[Length].x && ycursor == BoatVert[Length].y)
+             {
+               DrawPx(xcursor,ycursor,1);
+             }
          }
-      }
+       else // if outofshots == true
+         {
+           lostGame = true; //this will make it regester the if (lostgame == true) if statement in void loop... regenerates the board with a losing sound
+         }
     }
   
   
   
   
-  for (int i = 0; i < 8; i++)
+  for (int i = 0; i < 8; i++) //code to display and decrease ammo displayed 
   {
 //    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
       
@@ -291,7 +350,7 @@ void DrawAmmo()
     for (int i = 0; i < 7; i++)
   {
 //    DrawPx(PxAmmo[i].x,PxAmmo[i].y,2);
-    DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark); 
+    DrawPx(PxAmmo[7].x,PxAmmo[7].y,Dark); //draw dark over color to erase and decrease shots
   }
   if (ShotCounter == 6)
     for (int i = 0; i < 6; i++)
@@ -363,7 +422,7 @@ void DrawAmmo()
   }      
 }
 
-void DrawBoat()
+void DrawBoat() //code to draw boat arrays
 {
   for (int Length = 0;Length < 4;Length++)
   {
