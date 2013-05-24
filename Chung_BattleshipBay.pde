@@ -56,6 +56,7 @@ boolean isRed = false; //boolean variable to display drawn hits
 boolean OutofShots; // boolean variable to disable shooting once ammo is at zero
 int MoveBoatx = random(5); //random xcoordinate for boat
 int MoveBoaty = random(5); //random ycoordinate for boat
+int binaryIsHit = 0;
 
 //struct Boat
 //{
@@ -162,23 +163,23 @@ void DrawCursor()
   {
     if (Button_Right) //move cursor right
     {
-      if (isBlue) //checks if dot underneath cursor is blue
+      if (isBlue) //checks if dot underneath cursor is blue, made by Mr. Kiang, concept from Meggy_Brite
       {
-        isBlue = false; //if it is don't draw another one
+        isBlue = false; 
         DrawPx(xcursor,ycursor,Blue);
       }
-      else DrawPx(xcursor,ycursor,0); //if not draw the cursor Dark to blink it
+      else DrawPx(xcursor,ycursor,0); //if not draw the cursor Dark to leave it as it was
       xcursor=xcursor+1; 
       if (xcursor==7)
       {
         xcursor=6;
       }
       
-//      if (isRed)
-//      {
-//        isRed = false;
-//        DrawPx(xcursor,ycursor,Red);
-//      }
+      if (isRed)
+      {
+        isRed = false;
+        DrawPx(xcursor,ycursor,Red);
+      }
 //      else DrawPx(xcursor,ycursor,0);
 //      xcursor=xcursor+1;
     }
@@ -194,11 +195,11 @@ void DrawCursor()
       if (ycursor==7)
         ycursor=6;
       
-//      if (isRed)
-//      {
-//        isRed = false;
-//        DrawPx(xcursor,ycursor,Red);
-//      }
+      if (isRed)
+      {
+        isRed = false;
+        DrawPx(xcursor,ycursor,Red);
+      }
 //      else DrawPx(xcursor,ycursor,0);
 //      ycursor=ycursor+1;
     }
@@ -214,11 +215,11 @@ void DrawCursor()
       if (xcursor==0)
         xcursor=1;
 
-//      if (isRed)
-//      {
-//        isRed = false;
-//        DrawPx(xcursor,ycursor,Red);
-//      }
+      if (isRed)
+      {
+        isRed = false;
+        DrawPx(xcursor,ycursor,Red);
+      }
 //      else DrawPx(xcursor,ycursor,0);
 //      xcursor=xcursor-1;
     }
@@ -234,11 +235,11 @@ void DrawCursor()
       if (ycursor==0)
         ycursor=1;
     
-//      if (isRed)
-//      {
-//        isRed = false;
-//        DrawPx(xcursor,ycursor,Red);
-//      }
+      if (isRed)
+      {
+        isRed = false;
+        DrawPx(xcursor,ycursor,Red);
+      }
 //      else DrawPx(xcursor,ycursor,0);
 //      ycursor=ycursor-1;
     }
@@ -256,7 +257,7 @@ void DrawCursor()
 //    if (ReadPx(xcursor,ycursor) == Red) isRed = true;
 //    {
 //      DrawPx(xcursor,ycursor,1);
-//    }
+//    } 
   }
 
   if (CursorCounter%2 == 1) //other half of blinking cursor code
@@ -293,21 +294,33 @@ void DrawAmmo()
         {
           Serial.println(ShotCounter);
           Serial.println("i wanna draw the blue now");
-          Serial.println(OutofShots);
+//          Serial.println(OutofShots);
+          Serial.println("isHit = ");
+          Serial.println(binaryIsHit);
+//          boolean temp = isHit();
+//          if (temp == true) 
+//            Serial.println("true");
+//          if (temp == false) 
+//          Serial.println("false");
           ShotCounter = ShotCounter - 1; //decrease shot counter with every shot
           DrawPx(xcursor,ycursor,Blue); //Draw a blue dot to mark misses
         }
-       for (int Length = 0;Length < 3;Length++)
-         {
-           if (xcursor== BoatVert[Length].x && ycursor == BoatVert[Length].y)
-             {
-               DrawPx(xcursor,ycursor,1);
-             }
-         }
-       else // if outofshots == true
-         {
-           lostGame = true; //this will make it regester the if (lostgame == true) if statement in void loop... regenerates the board with a losing sound
-         }
+//       for (int Length = 0;Length < 3;Length++)
+//         {
+//           if (xcursor== BoatVert[Length].x && ycursor == BoatVert[Length].y)
+//             {
+//               DrawPx(xcursor,ycursor,1);
+//             }
+//         }
+        if (isHit == 0)
+        {
+          DrawPx(xcursor,ycursor,1);
+        }
+
+        if (OutofShots == true)
+        {
+          lostGame = true; //this will make it regester the if (lostgame == true) if statement in void loop... regenerates the board with a losing sound
+        }
     }
   
   
@@ -420,6 +433,24 @@ void DrawAmmo()
     DrawPx(PxAmmo[0].x,PxAmmo[0].y,Dark);   
   }
   }      
+}
+
+int isHit()
+{
+  for (int i = 0; i<4; i++)
+   {
+     if (xcursor == BoatVert[i].x && ycursor == BoatVert[i].y)
+      return 0;
+   }
+  for (int i = 0; i<3; i++)
+  {
+    if (xcursor == BoatHorz[i].x && ycursor == BoatHorz[i].y)
+      return 0;
+    
+    if (xcursor == Boat3[i].x && ycursor == Boat3[i].y)
+      return 0;
+  }
+  return 1;
 }
 
 void DrawBoat() //code to draw boat arrays
