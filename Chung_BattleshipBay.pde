@@ -1,4 +1,5 @@
 /* 
+Ideas for code
 Create two boolean variables: WonGame / LostGame; both start false
 In voidloop call three 'if' statements: 
   The first: if (wonGame == false) 
